@@ -1,6 +1,7 @@
 package com.xulc.chat.okhttp;
 
 
+import com.alibaba.fastjson.JSON;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -28,11 +29,7 @@ public class HttpUtil {
             @Override
             public void onError(Call call, Exception e, int i) {
                 listener.onFailure(code, e.getMessage());
-                if (e.getMessage().contains("request failed , reponse's code is")) {
 
-                } else {
-
-                }
 
             }
 
@@ -45,8 +42,7 @@ public class HttpUtil {
                     if (ResponseUtil.getInstance().isSuccess(baseResponse)) {
                         listener.onSuccess(code, s);
                     } else {
-
-
+                        listener.onFailure(code, s);
                     }
                 }
 
