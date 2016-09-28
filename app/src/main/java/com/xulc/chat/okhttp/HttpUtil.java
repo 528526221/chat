@@ -22,15 +22,13 @@ public class HttpUtil {
      * @param code
      * @param listener
      */
-    public static void enqueue(String url,Map<String,String> map, final int code, final ResponseListener listener) {
+    public static void requestEnqueue(String url,Map<String,String> map, final int code, final ResponseListener listener) {
 
         OkHttpUtils.post().url(url).params(map).build().execute(new StringCallback() {
 
             @Override
             public void onError(Call call, Exception e, int i) {
                 listener.onFailure(code, e.getMessage());
-
-
             }
 
             @Override
@@ -50,6 +48,35 @@ public class HttpUtil {
 
         });
     }
+
+    /**
+     * 不带主机地址则默认请求api主机
+     * @param path
+     * @param map
+     * @param code
+     * @param listener
+     */
+    public static void enqueue(String path,Map<String,String> map, int code, ResponseListener listener) {
+        requestEnqueue(HttpInterfaceRequest.getApiDomain()+path,map,code,listener);
+    }
+
+    /**
+     * 带主机地址访问
+     * @param domin
+     * @param path
+     * @param map
+     * @param code
+     * @param listener
+     */
+    public static void enqueue(String domin,String path,Map<String,String> map, int code, ResponseListener listener) {
+        requestEnqueue(domin+path,map,code,listener);
+    }
+
+
+
+
+
+
 
 
 
