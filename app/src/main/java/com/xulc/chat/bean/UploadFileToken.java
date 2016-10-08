@@ -1,4 +1,4 @@
-package com.xulc.chat.okhttp;
+package com.xulc.chat.bean;
 
 /**
  * Created by zqzhang on 16/4/28.

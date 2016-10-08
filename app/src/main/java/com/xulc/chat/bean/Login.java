@@ -1,10 +1,10 @@
-package com.xulc.chat.okhttp;
+package com.xulc.chat.bean;
 
 
 /**
  * Created by acer on 2016/4/16.
  */
-public class LoginContent {
+public class Login {
     private UserLogin userLogin;
     private String sessionID;
     private int ttlSeconds;

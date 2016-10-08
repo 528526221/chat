@@ -1,4 +1,4 @@
-package com.xulc.chat.okhttp;
+package com.xulc.chat.response;
 
 /**
  * Created by xuliangchun on 2016/9/21.

@@ -1,6 +1,7 @@
-package com.xulc.chat.okhttp;
+package com.xulc.chat.response;
 
 
+import com.xulc.chat.bean.UploadFileToken;
 
 /**
  * Created by xuliangchun on 2016/9/21.

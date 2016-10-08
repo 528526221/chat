@@ -1,4 +1,4 @@
-package com.xulc.chat.okhttp;
+package com.xulc.chat.bean;
 
 /**
  * Created by acer on 2016/4/26.

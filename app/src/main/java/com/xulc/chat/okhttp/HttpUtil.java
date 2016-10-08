@@ -1,6 +1,8 @@
 package com.xulc.chat.okhttp;
 
 
+import com.alibaba.fastjson.JSON;
+import com.xulc.chat.utils.ToastUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -21,18 +23,14 @@ public class HttpUtil {
      * @param code
      * @param listener
      */
-    public static void enqueue(String url,Map<String,String> map, final int code, final ResponseListener listener) {
+    public static void enqueue(String url,Map<String,String> map, final int code, final ResponseListener listener,Object tag) {
 
-        OkHttpUtils.post().url(url).params(map).build().execute(new StringCallback() {
+        OkHttpUtils.post().url(url).params(map).tag(tag).build().execute(new StringCallback() {
 
             @Override
             public void onError(Call call, Exception e, int i) {
                 listener.onFailure(code, e.getMessage());
-                if (e.getMessage().contains("request failed , reponse's code is")) {
-
-                } else {
-
-                }
+                ToastUtils.getInstance().showToast(e.getMessage());
 
             }
 
@@ -45,8 +43,8 @@ public class HttpUtil {
                     if (ResponseUtil.getInstance().isSuccess(baseResponse)) {
                         listener.onSuccess(code, s);
                     } else {
-
-
+                        ToastUtils.getInstance().showToast(ResponseUtil.getInstance().getErrorMsg(baseResponse));
+                        listener.onFailure(code, s);
                     }
                 }
 
