@@ -1,6 +1,8 @@
 package com.xulc.chat.okhttp;
 
 
+import com.xulc.chat.app.CWApplication;
+
 import java.util.HashMap;
 
 import java.util.Map;
@@ -24,6 +26,8 @@ public class HttpRequest {
     public static final String AppWebTest = "https://g-test.tyhealth.net";
 
     public static final String LoginUrl = "/app-login";
+    public static final String FriendLsitUrl = "/im-busi/app/friend/list";
+
     /**
      * 登录
      * @param username
@@ -38,10 +42,20 @@ public class HttpRequest {
         map.put("ttlseconds","604800");
         map.put("apptype","1");
         map.put("reqseq","1");
-        HttpUtil.enqueue(AuthDomainTest+LoginUrl,map,code,listener,tag);
+        HttpUtil.request(AuthDomainTest,LoginUrl,map,code,listener,tag);
     }
 
-
+    /**
+     * 获取好友列表
+     * @param code
+     * @param listener,tag
+     */
+    public static void getFriendList(int code,ResponseListener listener,Object tag){
+        Map<String,String> map = new HashMap<>();
+        map.put("sessionID", CWApplication.getInstance().getUser().getSessionID());
+        map.put("reqseq","1");
+        HttpUtil.request2(FriendLsitUrl, map, code, listener,tag);
+    }
 
 
 

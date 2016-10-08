@@ -53,7 +53,31 @@ public class HttpUtil {
         });
     }
 
+    /**
+     * 带主机地址请求
+     * @param host
+     * @param url
+     * @param map
+     * @param code
+     * @param listener
+     * @param tag
+     */
+    public static void request(String host,String url,Map<String,String> map, int code, ResponseListener listener,Object tag) {
+        enqueue(host + url, map, code, listener, tag);
+    }
 
 
+    /**
+     * 不带主机地址请求则默认一个
+     * @param url
+     * @param map
+     * @param code
+     * @param listener
+     * @param tag
+     */
+    public static void request2(String url,Map<String,String> map, int code, ResponseListener listener,Object tag) {
+
+        enqueue(HttpRequest.AppDomainTest+url,map,code,listener,tag);
+    }
 
 }

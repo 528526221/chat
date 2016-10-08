@@ -13,7 +13,7 @@ import org.xutils.x;
  */
 public class BitMapUtils {
     private static ImageOptions options;
-    public void displayImg(ImageView view,String url){
+    public static void displayImg(ImageView view,String url){
         if (options==null){
             options = new ImageOptions.Builder()
                     // 是否忽略GIF格式的图片

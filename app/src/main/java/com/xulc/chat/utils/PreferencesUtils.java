@@ -40,7 +40,7 @@ public class PreferencesUtils {
 	}
 
 	public String getString(String key) {
-		String value = null;
+		String value = "";
 		
 		if (null != mPreferences) {
 			value = mPreferences.getString(key, value);
