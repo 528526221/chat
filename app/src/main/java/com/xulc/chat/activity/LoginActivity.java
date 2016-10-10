@@ -65,6 +65,7 @@ public class LoginActivity extends BaseActivity implements ResponseListener {
         LoginResponse response = JSON.parseObject(result,LoginResponse.class);
         User user = new User();
         Login login = response.getContent();
+        PreferencesUtils.getInstance().putString(ShareKey.TOKEN,login.getSessionID());
         user.setSessionID(login.getSessionID());
         UserLogin userLogin = login.getUserLogin();
         user.setAppType(userLogin.getAppType());

@@ -30,6 +30,7 @@ public class CWApplication extends Application {
         setResolution();//首次启动应用初始化分辨率
         x.Ext.init(this);
         x.Ext.setDebug(true);
+
     }
 
 

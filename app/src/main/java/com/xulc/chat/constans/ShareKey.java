@@ -5,6 +5,10 @@ package com.xulc.chat.constans;
  * Created by acer on 2016/9/8.
  */
 public class ShareKey {
+    /**
+     * SessionId
+     */
+    public static final String TOKEN = "TOKEN";
 
     /**
      * 用户名
