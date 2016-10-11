@@ -4,6 +4,7 @@ package com.xulc.chat.bean;
  * Created by xuliangchun on 2016/10/10.
  */
 public class SenderId {
+    private String imgUrl;
     private String name;
     private String partyId;
     private String userId;
@@ -39,5 +40,13 @@ public class SenderId {
 
     public void setUserType(String userType) {
         this.userType = userType;
+    }
+
+    public String getImgUrl() {
+        return imgUrl==null?"":imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 }

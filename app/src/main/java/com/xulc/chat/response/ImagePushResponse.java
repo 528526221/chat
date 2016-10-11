@@ -1,18 +1,33 @@
 package com.xulc.chat.response;
 
+
+import com.alibaba.fastjson.JSON;
 import com.xulc.chat.bean.ImagePush;
 
 /**
  * Created by xuliangchun on 2016/10/10.
  */
 public class ImagePushResponse extends BasePushResponse {
-    private ImagePush content;
+    private String content;
 
-    public ImagePush getContent() {
+    public String getContent() {
         return content;
     }
 
-    public void setContent(ImagePush content) {
+    public void setContent(String content) {
         this.content = content;
+    }
+
+    private ImagePush imagePush;
+
+    public ImagePush getImagePush() {
+        if (imagePush==null){
+            imagePush = JSON.parseObject(content,ImagePush.class);
+        }
+        return imagePush;
+    }
+
+    public void setImagePush(ImagePush imagePush) {
+        this.imagePush = imagePush;
     }
 }

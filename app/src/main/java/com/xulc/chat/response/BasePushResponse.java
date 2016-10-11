@@ -7,17 +7,17 @@ import com.xulc.chat.bean.SenderId;
  * Created by xuliangchun on 2016/10/10.
  */
 public class BasePushResponse {
-    private int contentType;
-    private long createTime;
-    private String id;
-    private int priority;
-    private boolean putOfflineMsg;
-    private int qos;
-    private ReceiverId receiverId;
-    private SenderId senderId;
-    private int sendType;
-    private int ttl;
-    private boolean uiShow;
+    public int contentType;
+    public long createTime;
+    public String id;
+    public int priority;
+    public boolean putOfflineMsg;
+    public int qos;
+    public ReceiverId receiverId;
+    public SenderId senderId;
+    public int sendType;
+    public int ttl;
+    public boolean uiShow;
 
     public int getContentType() {
         return contentType;

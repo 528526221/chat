@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -54,6 +55,14 @@ public class FriendActivity extends BaseActivity implements ResponseListener {
                 })
                 .setNegativeButton("否", null)
                 .show();
+    }
+
+    @Event(value = R.id.lvFriend,type = AdapterView.OnItemClickListener.class)
+    private void onItemClick(AdapterView<?> parent, View view, int position, long id){
+        Intent intent = new Intent(this,ChatActivity.class);
+        intent.putExtra("partyId",adapter.getItem(position).getPartyId());
+        intent.putExtra("name",adapter.getItem(position).getCallName());
+        startActivity(intent);
     }
 
     @Override

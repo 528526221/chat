@@ -1,5 +1,7 @@
 package com.xulc.chat.bean;
 
+import android.text.TextUtils;
+
 /**
  * Created by xuliangchun on 2016/10/8.
  */
@@ -18,6 +20,9 @@ public class Friend {
     private String activedOnFamilyTree;
 
     public String getCallName() {
+        if (TextUtils.isEmpty(callName)){
+            callName = getFirstName();
+        }
         return callName;
     }
 
@@ -34,6 +39,9 @@ public class Friend {
     }
 
     public String getFirstName() {
+        if (TextUtils.isEmpty(firstName)){
+            firstName = getUserLoginId();
+        }
         return firstName;
     }
 

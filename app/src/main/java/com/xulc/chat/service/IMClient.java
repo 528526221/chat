@@ -2,10 +2,17 @@ package com.xulc.chat.service;
 
 import android.util.Log;
 
+import com.alibaba.fastjson.JSON;
 import com.xulc.chat.app.CWApplication;
 import com.xulc.chat.bean.EventMsg;
 import com.xulc.chat.constans.EventCode;
 import com.xulc.chat.okhttp.HttpRequest;
+import com.xulc.chat.response.BasePushResponse;
+import com.xulc.chat.response.ImagePushResponse;
+import com.xulc.chat.response.TextPushResponse;
+import com.xulc.chat.response.VoicePushResponse;
+import com.xulc.chat.table.TableChat;
+import com.xulc.chat.utils.DbUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.java_websocket.client.WebSocketClient;
@@ -59,6 +66,49 @@ public class IMClient extends WebSocketClient {
 			return;
 		}
 		Log.i("xlc", "received:" + message);
+		BasePushResponse basePushResponse = JSON.parseObject(message,BasePushResponse.class);
+		if (basePushResponse==null)
+			return;
+		switch (basePushResponse.getContentType()){
+			case 1:
+				//文本消息
+				TableChat chat = new TableChat();
+				TextPushResponse response = JSON.parseObject(message,TextPushResponse.class);
+				chat.setContentType(1);
+				chat.setFromMe(1);
+				chat.setToPartyId(response.getSenderId().getPartyId());
+				chat.setText(response.getContent());
+				chat.setHeadImg(response.getSenderId().getImgUrl());
+				DbUtils.getInstance().save(chat);
+				break;
+			case 2:
+				//图片消息
+				TableChat chat1 = new TableChat();
+				ImagePushResponse response1 = JSON.parseObject(message,ImagePushResponse.class);
+				chat1.setContentType(2);
+				chat1.setFromMe(1);
+				chat1.setToPartyId(response1.getSenderId().getPartyId());
+				chat1.setImgUrl(response1.getImagePush().getFileUrl());
+				chat1.setHeadImg(response1.getSenderId().getImgUrl());
+				DbUtils.getInstance().save(chat1);
+				break;
+			case 4:
+				//语音消息
+				TableChat chat2 = new TableChat();
+				VoicePushResponse response2 = JSON.parseObject(message,VoicePushResponse.class);
+				chat2.setContentType(2);
+				chat2.setFromMe(1);
+				chat2.setToPartyId(response2.getSenderId().getPartyId());
+				chat2.setAudioUrl(response2.getContent().getFileUrl());
+				chat2.setDurationSeconds(response2.getContent().getDurationSeconds());
+				chat2.setHeadImg(response2.getSenderId().getImgUrl());
+				DbUtils.getInstance().save(chat2);
+				break;
+		}
+
+		EventMsg msg = new EventMsg();
+		msg.setMsgCode(EventCode.IM_CHAT);
+		EventBus.getDefault().post(msg);
 	}
 
 
