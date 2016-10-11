@@ -19,6 +19,7 @@ import com.xulc.chat.constans.ShareKey;
 import com.xulc.chat.okhttp.HttpRequest;
 import com.xulc.chat.okhttp.ResponseListener;
 import com.xulc.chat.response.LoginResponse;
+import com.xulc.chat.service.IMConnectService;
 import com.xulc.chat.utils.MD5Util;
 import com.xulc.chat.utils.PreferencesUtils;
 
@@ -38,6 +39,7 @@ public class LoginActivity extends BaseActivity implements ResponseListener {
 
     @Override
     public void underCreate() {
+        stopService(new Intent(this, IMConnectService.class));
         setAppTitle("登录");
         etName.setText(PreferencesUtils.getInstance().getString(ShareKey.USER_NAME));
         etPwd.setText(PreferencesUtils.getInstance().getString(ShareKey.USER_PWD));
@@ -76,7 +78,8 @@ public class LoginActivity extends BaseActivity implements ResponseListener {
         user.setUserLoginId(userLogin.getUserLoginId());
         CWApplication.getInstance().setUser(user);
         cancelWaiting();
-        startActivity(new Intent(this,FriendActivity.class));
+        startActivity(new Intent(this, FriendActivity.class));
+        finish();
     }
 
     @Override

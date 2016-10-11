@@ -21,7 +21,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class IMClient extends WebSocketClient {
 	/** 用来接收心跳，并判断心跳隔了多久才回复的。 */
 	private final BlockingQueue<String> hbQueue;
-	private static IMClient imClient;
+	public static IMClient imClient;
 
 	public static IMClient getInstance(){
 		if (imClient==null){

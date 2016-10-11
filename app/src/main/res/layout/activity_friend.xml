@@ -3,7 +3,20 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-    <include layout="@layout/layout_title"></include>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_44">
+        <include layout="@layout/layout_title"></include>
+        <TextView
+            android:id="@+id/tvLogOut"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_44"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:padding="@dimen/dp_14"
+            android:text="退出"/>
+    </RelativeLayout>
     <ListView
         android:id="@+id/lvFriend"
         android:layout_width="match_parent"

@@ -1,7 +1,11 @@
 package com.xulc.chat.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.xulc.chat.R;
@@ -14,6 +18,7 @@ import com.xulc.chat.response.FriendResponse;
 import com.xulc.chat.service.IMConnectService;
 
 import org.xutils.view.annotation.ContentView;
+import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 
 
@@ -23,6 +28,7 @@ import org.xutils.view.annotation.ViewInject;
 @ContentView(R.layout.activity_friend)
 public class FriendActivity extends BaseActivity implements ResponseListener {
     @ViewInject(R.id.lvFriend) ListView lvFriend;
+    @ViewInject(R.id.tvLogOut) TextView tvLogOut;
     FriendAdapter adapter;
     @Override
     public void underCreate() {
@@ -33,10 +39,32 @@ public class FriendActivity extends BaseActivity implements ResponseListener {
         startService(new Intent(this, IMConnectService.class));
     }
 
+    @Event(value = R.id.tvLogOut)
+    private void onClick(View view){
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle("确认")
+                .setMessage("确定吗？")
+                .setPositiveButton("是", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        stopService(new Intent(FriendActivity.this, IMConnectService.class));
+                        HttpRequest.Logout(2, FriendActivity.this, FriendActivity.this);
+                        startActivity(new Intent(FriendActivity.this,LoginActivity.class));
+                    }
+                })
+                .setNegativeButton("否", null)
+                .show();
+    }
+
     @Override
     public void onSuccess(int code, String result) {
-        FriendResponse response = JSON.parseObject(result,FriendResponse.class);
-        adapter.refresh(response.getContent());
+        switch (code){
+            case 1:
+                FriendResponse response = JSON.parseObject(result,FriendResponse.class);
+                adapter.refresh(response.getContent());
+                break;
+        }
+
     }
 
     @Override

@@ -36,15 +36,18 @@ public class IMConnectService extends Service{
     public void onEventMainThread(EventMsg msg){
         switch (msg.getMsgCode()){
             case EventCode.SOCKET_CONNECT:
-                ws.send("hb~");
-                Log.i("xlc", "发送心跳消息:" +"hb~");
+
                 // 发送心跳。
                 // 发送任意内容，服务端收到后，会在内容后面加上“-ok”，再返回。
                 // 比如发的“hb~”，那么服务端会返回一个“hb~-ok”
                 new Thread(new Runnable() {
                     public void run() {
                         for (;;) {
+                            if (ws==null||ws.isClosed()||ws.isClosing()){
+                                break;
+                            }
                             ws.send("hb~");
+                            Log.i("xlc", "发送心跳消息:" + "hb~");
                             // 发完后，从回复队列里取，如果5秒取不到，或者回复内容不对，就认为连接不可用了，断开。
                             String reply = null;
                             try {
@@ -79,6 +82,7 @@ public class IMConnectService extends Service{
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        IMClient.imClient = null;
         ws = IMClient.getInstance();
         SSLContext sslCtx = null;
         try {

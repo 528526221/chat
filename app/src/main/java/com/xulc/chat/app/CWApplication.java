@@ -91,6 +91,7 @@ public class CWApplication extends Application {
      * @param user
      */
     public void setUser(User user){
+        this.user = user;
         String str = JSON.toJSONString(user);
         PreferencesUtils.getInstance().putString(ShareKey.USER,str);
     }

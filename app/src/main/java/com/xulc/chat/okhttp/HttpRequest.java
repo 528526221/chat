@@ -27,6 +27,7 @@ public class HttpRequest {
 
     public static final String LoginUrl = "/app-login";
     public static final String FriendLsitUrl = "/im-busi/app/friend/list";
+    public static final String LogoutUrl = "/app-logout";
 
     /**
      * 登录
@@ -54,11 +55,21 @@ public class HttpRequest {
         Map<String,String> map = new HashMap<>();
         map.put("sessionID", CWApplication.getInstance().getUser().getSessionID());
         map.put("reqseq","1");
-        HttpUtil.request2(FriendLsitUrl, map, code, listener,tag);
+        HttpUtil.request2(FriendLsitUrl, map, code, listener, tag);
     }
 
-
-
+    /**
+     * 退出
+     * @param code
+     * @param listener
+     * @param tag
+     */
+    public static void Logout(int code,ResponseListener listener,Object tag){
+        Map<String,String> map = new HashMap<>();
+        map.put("sessionID", CWApplication.getInstance().getUser().getSessionID());
+        map.put("reqseq","1");
+        HttpUtil.request(AuthDomainTest,LogoutUrl, map, code, listener, tag);
+    }
 
 
 }
