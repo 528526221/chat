@@ -4,8 +4,10 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="px_0">0px</dimen>
     <dimen name="px_1">1px</dimen>
+    <dimen name="dp_36">36dp</dimen>
     <dimen name="dp_44">44dp</dimen>
     <dimen name="dp_50">50dp</dimen>
+    <dimen name="dp_5">5dp</dimen>
     <dimen name="dp_6">6dp</dimen>
     <dimen name="dp_12">12dp</dimen>
     <dimen name="dp_14">14dp</dimen>

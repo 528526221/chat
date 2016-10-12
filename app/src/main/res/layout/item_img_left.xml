@@ -1,32 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content">
-    <LinearLayout
-        android:layout_width="@dimen/px_0"
-        android:layout_weight="1"
+              android:layout_height="wrap_content"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:padding="@dimen/dp_6">
+    <TextView
+        android:id="@+id/tvDate"
+        style="@style/chat_item_date"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <ImageView
+        <com.xulc.chat.View.RoundImageView
             android:id="@+id/headImg"
-            android:layout_width="@dimen/dp_44"
-            android:layout_height="@dimen/dp_44"
-            android:layout_marginLeft="@dimen/dp_6"
-            android:layout_marginRight="@dimen/dp_6"
-            android:src="@mipmap/ic_launcher"/>
-        <ImageView
-            android:id="@+id/chatImg"
-            android:layout_width="@dimen/px_0"
-            android:layout_height="@dimen/dp_150"
-            android:layout_weight="1"
-            android:layout_marginRight="@dimen/dp_12"
-            android:scaleType="centerInside"
-            android:src="@mipmap/ic_launcher"/>
-    </LinearLayout>
-    <View
-        android:layout_width="@dimen/px_0"
-        android:layout_weight="1"
-        android:layout_height="wrap_content">
+            style="@style/chat_item_avatar"
+            app:circle="true"/>
+        <RelativeLayout
+            style="@style/chat_item_content"
+            android:layout_toRightOf="@+id/headImg">
+            <ImageView
+                android:id="@+id/chatImg"
+                style="@style/chat_item_image_content"
+                android:src="@mipmap/ic_launcher"></ImageView>
+        </RelativeLayout>
+    </RelativeLayout>
 
-    </View>
 
 </LinearLayout>
