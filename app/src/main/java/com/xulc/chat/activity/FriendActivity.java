@@ -50,7 +50,8 @@ public class FriendActivity extends BaseActivity implements ResponseListener {
                     public void onClick(DialogInterface dialog, int which) {
                         stopService(new Intent(FriendActivity.this, IMConnectService.class));
                         HttpRequest.Logout(2, FriendActivity.this, FriendActivity.this);
-                        startActivity(new Intent(FriendActivity.this,LoginActivity.class));
+                        startActivity(new Intent(FriendActivity.this, LoginActivity.class));
+                        FriendActivity.this.finish();
                     }
                 })
                 .setNegativeButton("否", null)

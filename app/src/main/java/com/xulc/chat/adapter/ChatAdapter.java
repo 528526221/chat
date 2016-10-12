@@ -8,7 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xulc.chat.R;
+
 import com.xulc.chat.table.TableChat;
 import com.xulc.chat.utils.BitMapUtils;
 
@@ -132,8 +134,10 @@ public class ChatAdapter extends BaseAdapter {
                     imgHolderLeft.headImg = (ImageView) convertView.findViewById(R.id.headImg);
                     imgHolderLeft.chatImg = (ImageView) convertView.findViewById(R.id.chatImg);
                     convertView.setTag(imgHolderLeft);
-                    BitMapUtils.displayImg(imgHolderLeft.headImg, bean.getHeadImg());
-                    BitMapUtils.displayImg(imgHolderLeft.chatImg, bean.getImgUrl());
+                    ImageLoader.getInstance().displayImage(bean.getHeadImg(), imgHolderLeft
+                            .headImg, BitMapUtils.headOptions);
+                    ImageLoader.getInstance().displayImage(bean.getImgUrl(),
+                            imgHolderLeft.chatImg, BitMapUtils.imageOptions);
                     break;
                 case IMG_RIGHT:
                     convertView = inflater.inflate(R.layout.item_img_right,parent,false);
@@ -141,8 +145,10 @@ public class ChatAdapter extends BaseAdapter {
                     imgHolderRight.headImg = (ImageView) convertView.findViewById(R.id.headImg);
                     imgHolderRight.chatImg = (ImageView) convertView.findViewById(R.id.chatImg);
                     convertView.setTag(imgHolderRight);
-                    BitMapUtils.displayImg(imgHolderRight.headImg, bean.getHeadImg());
-                    BitMapUtils.displayImg(imgHolderRight.chatImg, bean.getImgUrl());
+                    ImageLoader.getInstance().displayImage(bean.getHeadImg(), imgHolderRight
+                            .headImg, BitMapUtils.headOptions);
+                    ImageLoader.getInstance().displayImage(bean.getImgUrl(),
+                            imgHolderRight.chatImg, BitMapUtils.imageOptions);
                     break;
             }
         }else {
@@ -159,13 +165,17 @@ public class ChatAdapter extends BaseAdapter {
                     break;
                 case IMG_LEFT:
                     imgHolderLeft = (ImgHolderLeft) convertView.getTag();
-                    BitMapUtils.displayImg(imgHolderLeft.headImg, bean.getHeadImg());
-                    BitMapUtils.displayImg(imgHolderLeft.chatImg, bean.getImgUrl());
+                    ImageLoader.getInstance().displayImage(bean.getHeadImg(), imgHolderLeft
+                            .headImg, BitMapUtils.headOptions);
+                    ImageLoader.getInstance().displayImage(bean.getImgUrl(),
+                            imgHolderLeft.chatImg, BitMapUtils.imageOptions);
                     break;
                 case IMG_RIGHT:
                     imgHolderRight = (ImgHolderRight) convertView.getTag();
-                    BitMapUtils.displayImg(imgHolderRight.headImg, bean.getHeadImg());
-                    BitMapUtils.displayImg(imgHolderRight.chatImg, bean.getImgUrl());
+                    ImageLoader.getInstance().displayImage(bean.getHeadImg(), imgHolderRight
+                            .headImg, BitMapUtils.headOptions);
+                    ImageLoader.getInstance().displayImage(bean.getImgUrl(),
+                            imgHolderRight.chatImg, BitMapUtils.imageOptions);
                     break;
             }
         }

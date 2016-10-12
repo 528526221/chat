@@ -6,6 +6,8 @@ import android.util.DisplayMetrics;
 
 
 import com.alibaba.fastjson.JSON;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.xulc.chat.bean.User;
 import com.xulc.chat.constans.ShareKey;
 import com.xulc.chat.utils.PreferencesUtils;
@@ -30,7 +32,8 @@ public class CWApplication extends Application {
         setResolution();//首次启动应用初始化分辨率
         x.Ext.init(this);
         x.Ext.setDebug(true);
-
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
+        ImageLoader.getInstance().init(config);
     }
 
 
