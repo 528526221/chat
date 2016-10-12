@@ -72,9 +72,8 @@ public class IMConnectService extends Service{
                 }, "HearbeatSendThread").start();
                 break;
             case EventCode.SEED_ERROR:
-                BaseResponse baseResponse = JSON.parseObject(msg, BaseResponse.class);
-                TableChat chat = DbUtils.getInstance().findById(TableChat.class, baseResponse
-                        .getReqseq());
+                String str = msg.getBundle().getString("data");
+                BaseResponse baseResponse = JSON.parseObject(str, BaseResponse.class);
                 KeyValue keyValue[] = new KeyValue[1];
                 keyValue[0] = new KeyValue("sendSuccess",1);
                 DbUtils.getInstance().updateById(TableChat.class,baseResponse.getReqseq(),keyValue);
