@@ -7,16 +7,20 @@ import org.xutils.db.annotation.Table;
  *聊天记录表
  * Created by xuliangchun on 2016/10/11.
  */
-@Table(name = "table_chat")
+@Table(name = "_table_chat")
 public class TableChat {
-    @Column(name = "id",isId = true)
+    @Column(name = "id",isId = true,autoGen = false)
     private long id;
+    @Column(name = "toTel")
+    private String toTel;//对方电话
     @Column(name = "toPartyId")
-    private String toPartyId;//和谁聊
+    private String toPartyId;//对方partyID
     @Column(name = "headImg")
     private String headImg;//头像
     @Column(name = "fromMe")
     private int fromMe;//消息来源是否我说的(0默认我说的)
+    @Column(name = "sendSuccess")
+    private int sendSuccess;//消息是否发送成功(0默认成功)
     @Column(name = "contentType")
     private int contentType;//消息类型
     @Column(name = "text")
@@ -27,6 +31,7 @@ public class TableChat {
     private String audioUrl;//音频网络地址
     @Column(name = "durationSeconds")
     private int durationSeconds;//音频时长
+
 
     public long getId() {
         return id;
@@ -98,5 +103,21 @@ public class TableChat {
 
     public void setHeadImg(String headImg) {
         this.headImg = headImg;
+    }
+
+    public String getToTel() {
+        return toTel;
+    }
+
+    public void setToTel(String toTel) {
+        this.toTel = toTel;
+    }
+
+    public int getSendSuccess() {
+        return sendSuccess;
+    }
+
+    public void setSendSuccess(int sendSuccess) {
+        this.sendSuccess = sendSuccess;
     }
 }

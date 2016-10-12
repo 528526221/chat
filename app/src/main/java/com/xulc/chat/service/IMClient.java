@@ -74,9 +74,13 @@ public class IMClient extends WebSocketClient {
 				//文本消息
 				TableChat chat = new TableChat();
 				TextPushResponse response = JSON.parseObject(message,TextPushResponse.class);
+				long maxId = DbUtils.getInstance().getCurMaxId() +1;
+				DbUtils.getInstance().setCurMaxId(maxId);
+				chat.setId(maxId);
 				chat.setContentType(1);
 				chat.setFromMe(1);
 				chat.setToPartyId(response.getSenderId().getPartyId());
+				chat.setToTel(response.getSenderId().getUserId());
 				chat.setText(response.getContent());
 				chat.setHeadImg(response.getSenderId().getImgUrl());
 				DbUtils.getInstance().save(chat);
@@ -85,9 +89,13 @@ public class IMClient extends WebSocketClient {
 				//图片消息
 				TableChat chat1 = new TableChat();
 				ImagePushResponse response1 = JSON.parseObject(message,ImagePushResponse.class);
+				long maxId1 = DbUtils.getInstance().getCurMaxId() +1;
+				DbUtils.getInstance().setCurMaxId(maxId1);
+				chat1.setId(maxId1);
 				chat1.setContentType(2);
 				chat1.setFromMe(1);
 				chat1.setToPartyId(response1.getSenderId().getPartyId());
+				chat1.setToTel(response1.getSenderId().getUserId());
 				chat1.setImgUrl(response1.getImagePush().getFileUrl());
 				chat1.setHeadImg(response1.getSenderId().getImgUrl());
 				DbUtils.getInstance().save(chat1);
@@ -96,9 +104,13 @@ public class IMClient extends WebSocketClient {
 				//语音消息
 				TableChat chat2 = new TableChat();
 				VoicePushResponse response2 = JSON.parseObject(message,VoicePushResponse.class);
+				long maxId2 = DbUtils.getInstance().getCurMaxId() +1;
+				DbUtils.getInstance().setCurMaxId(maxId2);
+				chat2.setId(maxId2);
 				chat2.setContentType(2);
 				chat2.setFromMe(1);
 				chat2.setToPartyId(response2.getSenderId().getPartyId());
+				chat2.setToTel(response2.getSenderId().getUserId());
 				chat2.setAudioUrl(response2.getContent().getFileUrl());
 				chat2.setDurationSeconds(response2.getContent().getDurationSeconds());
 				chat2.setHeadImg(response2.getSenderId().getImgUrl());

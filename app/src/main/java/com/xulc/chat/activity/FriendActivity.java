@@ -62,6 +62,7 @@ public class FriendActivity extends BaseActivity implements ResponseListener {
     private void onItemClick(AdapterView<?> parent, View view, int position, long id){
         Intent intent = new Intent(this,ChatActivity.class);
         intent.putExtra("partyId",adapter.getItem(position).getPartyId());
+        intent.putExtra("tel",adapter.getItem(position).getUserLoginId());
         intent.putExtra("name",adapter.getItem(position).getCallName());
         startActivity(intent);
     }

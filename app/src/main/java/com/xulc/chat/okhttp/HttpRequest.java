@@ -28,6 +28,17 @@ public class HttpRequest {
     public static final String LoginUrl = "/app-login";
     public static final String FriendLsitUrl = "/im-busi/app/friend/list";
     public static final String LogoutUrl = "/app-logout";
+    public static final String SendTextUrl = "/im-busi/app/im/send/p2p/text";
+    public static final String SendGroupTextUrl = "/im-busi/app/im/send/fg/text";
+
+    public static final String SendImgUrl = "/im-busi/app/im/send/p2p/image";
+    public static final String SendGroupImgUrl = "/im-busi/app/im/send/fg/image";
+
+    public static final String SendVoiceUrl = "/im-busi/app/im/send/p2p/voice";
+    public static final String SendGroupVoiceUrl = "/im-busi/app/im/send/fg/voice";
+
+    public static final String SendVideoUrl = "/im-busi/app/im/send/p2p/video";
+    public static final String SendGroupVideoUrl = "/im-busi/app/im/send/fg/video";
 
     /**
      * 登录
@@ -68,8 +79,29 @@ public class HttpRequest {
         Map<String,String> map = new HashMap<>();
         map.put("sessionID", CWApplication.getInstance().getUser().getSessionID());
         map.put("reqseq","1");
-        HttpUtil.request(AuthDomainTest,LogoutUrl, map, code, listener, tag);
+        HttpUtil.request(AuthDomainTest, LogoutUrl, map, code, listener, tag);
     }
+
+    /**
+     * 单聊发送文本
+     * @param receiverId
+     * @param content
+     * @param receiverUserType
+     * @param code
+     * @param listener
+     * @param reqseq
+     * @param tag
+     */
+    public static void sendText(String receiverId,String content,String receiverUserType,int code,ResponseListener listener,long reqseq,Object tag){
+        Map<String,String> map = new HashMap<>();
+        map.put("sessionID", CWApplication.getInstance().getUser().getSessionID());
+        map.put("reqseq",String.valueOf(reqseq));
+        map.put("receiverId",receiverId);
+        map.put("content",content);
+        map.put("receiverUserType",receiverUserType);
+        HttpUtil.request2(SendTextUrl, map, code, listener, tag);
+    }
+
 
 
 }

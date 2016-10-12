@@ -40,6 +40,11 @@ public class ChatAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void addMsg(TableChat chat){
+        this.chatList.add(chat);
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
         return chatList.size();
@@ -95,6 +100,16 @@ public class ChatAdapter extends BaseAdapter {
                         break;
                 }
                 break;
+            default:
+                switch (formMe){
+                    case 0:
+                        //right
+                        return TEXT_RIGHT;
+                    case 1:
+                        //left
+                        return TEXT_LEFT;
+                }
+                break;
         }
 
         return super.getItemViewType(position);
@@ -117,7 +132,8 @@ public class ChatAdapter extends BaseAdapter {
                     textHolderLeft.tvText = (TextView) convertView.findViewById(R.id.tvText);
                     convertView.setTag(textHolderLeft);
                     textHolderLeft.tvText.setText(bean.getText());
-                    BitMapUtils.displayImg(textHolderLeft.headImg, bean.getHeadImg());
+                    ImageLoader.getInstance().displayImage(bean.getHeadImg(), textHolderLeft
+                            .headImg, BitMapUtils.headOptions);
                     break;
                 case TEXT_RIGHT:
                     convertView = inflater.inflate(R.layout.item_text_right,parent,false);
@@ -126,7 +142,8 @@ public class ChatAdapter extends BaseAdapter {
                     textHolderRight.tvText = (TextView) convertView.findViewById(R.id.tvText);
                     convertView.setTag(textHolderRight);
                     textHolderRight.tvText.setText(bean.getText());
-                    BitMapUtils.displayImg(textHolderRight.headImg, bean.getHeadImg());
+                    ImageLoader.getInstance().displayImage(bean.getHeadImg(), textHolderRight
+                            .headImg, BitMapUtils.headOptions);
                     break;
                 case IMG_LEFT:
                     convertView = inflater.inflate(R.layout.item_img_left,parent,false);
@@ -156,12 +173,14 @@ public class ChatAdapter extends BaseAdapter {
                 case TEXT_LEFT:
                     textHolderLeft = (TextHolderLeft) convertView.getTag();
                     textHolderLeft.tvText.setText(bean.getText());
-                    BitMapUtils.displayImg(textHolderLeft.headImg, bean.getHeadImg());
+                    ImageLoader.getInstance().displayImage(bean.getHeadImg(), textHolderLeft
+                            .headImg, BitMapUtils.headOptions);
                     break;
                 case TEXT_RIGHT:
                     textHolderRight = (TextHolderRight) convertView.getTag();
                     textHolderRight.tvText.setText(bean.getText());
-                    BitMapUtils.displayImg(textHolderRight.headImg, bean.getHeadImg());
+                    ImageLoader.getInstance().displayImage(bean.getHeadImg(), textHolderRight
+                            .headImg, BitMapUtils.headOptions);
                     break;
                 case IMG_LEFT:
                     imgHolderLeft = (ImgHolderLeft) convertView.getTag();
@@ -169,6 +188,7 @@ public class ChatAdapter extends BaseAdapter {
                             .headImg, BitMapUtils.headOptions);
                     ImageLoader.getInstance().displayImage(bean.getImgUrl(),
                             imgHolderLeft.chatImg, BitMapUtils.imageOptions);
+
                     break;
                 case IMG_RIGHT:
                     imgHolderRight = (ImgHolderRight) convertView.getTag();

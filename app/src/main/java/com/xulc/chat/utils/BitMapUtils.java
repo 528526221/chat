@@ -41,8 +41,8 @@ public class BitMapUtils {
 
     public static DisplayImageOptions imageOptions = new DisplayImageOptions.Builder()
             .showImageOnLoading(R.mipmap.ic_launcher) // resource or drawable
-            .showImageForEmptyUri(R.mipmap.back_icon) // resource or drawable
-            .showImageOnFail(R.mipmap.back_icon) // resource or drawable
+            .showImageForEmptyUri(R.mipmap.ic_launcher) // resource or drawable
+            .showImageOnFail(R.mipmap.ic_launcher) // resource or drawable
             .considerExifParams(false) // default
             .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
             .bitmapConfig(Bitmap.Config.RGB_565)
@@ -53,8 +53,8 @@ public class BitMapUtils {
             .build();
     public static DisplayImageOptions headOptions = new DisplayImageOptions.Builder()
             .showImageOnLoading(R.mipmap.ic_launcher) // resource or drawable
-            .showImageForEmptyUri(R.mipmap.back_icon) // resource or drawable
-            .showImageOnFail(R.mipmap.back_icon) // resource or drawable
+            .showImageForEmptyUri(R.mipmap.ic_launcher) // resource or drawable
+            .showImageOnFail(R.mipmap.ic_launcher) // resource or drawable
             .considerExifParams(false) // default
             .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
             .bitmapConfig(Bitmap.Config.RGB_565)

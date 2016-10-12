@@ -9,12 +9,17 @@ import android.support.annotation.Nullable;
 
 import android.util.Log;
 
+import com.alibaba.fastjson.JSON;
 import com.xulc.chat.bean.EventMsg;
 import com.xulc.chat.constans.EventCode;
+import com.xulc.chat.okhttp.BaseResponse;
+import com.xulc.chat.table.TableChat;
+import com.xulc.chat.utils.DbUtils;
 
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.xutils.common.util.KeyValue;
 
 import java.util.concurrent.TimeUnit;
 
@@ -66,6 +71,14 @@ public class IMConnectService extends Service{
                     }
                 }, "HearbeatSendThread").start();
                 break;
+            case EventCode.SEED_ERROR:
+                BaseResponse baseResponse = JSON.parseObject(msg, BaseResponse.class);
+                TableChat chat = DbUtils.getInstance().findById(TableChat.class, baseResponse
+                        .getReqseq());
+                KeyValue keyValue[] = new KeyValue[1];
+                keyValue[0] = new KeyValue("sendSuccess",1);
+                DbUtils.getInstance().updateById(TableChat.class,baseResponse.getReqseq(),keyValue);
+                break;
         }
     }
 
@@ -107,7 +120,16 @@ public class IMConnectService extends Service{
                    if (ws.isOpen()){
                        break;
                    }  else {
-                      ws.connect();
+                       IMClient.imClient = null;
+                       ws = IMClient.getInstance();
+                       SSLContext sslCtx = null;
+                       try {
+                           sslCtx = SSLContextBuilder.create(true, BestlinkerCertificate.CERT);
+                           ws.setSocket(sslCtx.getSocketFactory().createSocket());
+                           ws.connect();
+                       } catch (Exception e) {
+                           e.printStackTrace();
+                       }
                    }
                }
 
