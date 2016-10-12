@@ -92,6 +92,27 @@ public class IMConnectService extends Service{
         } catch (Exception e) {
             e.printStackTrace();
         }
+        /**
+         * 开始连接后3秒检查状态
+         */
+       new Thread(new Runnable() {
+           @Override
+           public void run() {
+               for (;;){
+                   try {
+                       Thread.sleep(3*1000);
+                   } catch (InterruptedException e) {
+                       e.printStackTrace();
+                   }
+                   if (ws.isOpen()){
+                       break;
+                   }  else {
+                      ws.connect();
+                   }
+               }
+
+           }
+       }).start();
 
 
 
