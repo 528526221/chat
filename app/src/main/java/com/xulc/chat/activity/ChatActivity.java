@@ -47,7 +47,7 @@ public class ChatActivity extends BaseActivity implements ResponseListener {
         public void handleMessage(Message msg) {
             chatList = DbUtils.getInstance().findByWhere(TableChat.class,"toPartyId","=",partyId);
             adapter.refresh(chatList);
-            lvChat.setSelection(adapter.getCount()-1);
+            lvChat.setSelection(ListView.FOCUS_DOWN);
         }
     };
 
