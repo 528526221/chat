@@ -39,13 +39,7 @@ public class SSLContextBuilder {
 				if (!veriCertificate) {
 					return;
 				}
-				if (certs == null || certs.length < 3) {
-					throw new CertificateException("证书链数量错误。");
-				}
 				certs[0].checkValidity();
-//				if (!certs[0].equals(hostCertificate)) {
-//					throw new CertificateException("证书不匹配，SSL认证失败。");
-//				}
 			}
 		} }, new SecureRandom());
 		return ctx;
