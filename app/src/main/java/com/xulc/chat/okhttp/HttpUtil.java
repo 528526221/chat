@@ -1,23 +1,21 @@
 package com.xulc.chat.okhttp;
 
-
-import android.graphics.Bitmap;
-import android.os.Environment;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSON;
+import com.xulc.chat.response.PostFileResponse;
 import com.xulc.chat.utils.ToastUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.BitmapCallback;
-import com.zhy.http.okhttp.callback.FileCallBack;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
 import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * okhttp 请求工具类
@@ -90,44 +88,75 @@ public class HttpUtil {
     }
 
 
-    public static void downFile(ImageView imageView,String url){
-        OkHttpUtils.get().url(url).build().execute(new FileCallBack(Environment
-                .getExternalStorageDirectory().getAbsolutePath(), url) {
+    /**
+     * 上传文件
+     * @param path
+     * @param code
+     * @param listener
+     */
+    public static void postFile(String path,final int code, final ResponseListener listener){
+        String uploadToken = "";
+        String uploadUrl = "";
+        OkHttpUtils.post().addFile("file","",new File(path)).url(uploadUrl).addParams("token",
+                uploadToken).build().execute(new StringCallback() {
+
             @Override
             public void onError(Call call, Exception e, int i) {
-                Log.e("xlc", "onError :" + e.getMessage());
+                listener.onFailure(code, e.getMessage());
+                ToastUtils.getInstance().showToast(e.getMessage());
             }
 
             @Override
-            public void onResponse(File file, int i) {
+            public void onResponse(String s, int i) {
+                PostFileResponse response = JSON.parseObject(s, PostFileResponse.class);
+                if (response == null) {
+                    listener.onFailure(code, s);
+                } else {
+                    if (response.getKey() != null) {
+                        listener.onSuccess(code, s);
+                    } else {
+                        listener.onFailure(code, s);
+                    }
+                }
+
 
             }
 
+        });
+    }
+
+
+        /**
+         * 上传图片
+         * @param request
+         */
+    public static void postImage(Request request, final int code, final ResponseListener listener , final int reqseq) {
+
+        OkHttpUtils.getInstance().getOkHttpClient().newCall(request).enqueue(new Callback() {
             @Override
-            public void inProgress(float progress, long total, int id) {
-                super.inProgress(progress, total, id);
-                Log.i("xlc", "下载中：" + progress);
+            public void onFailure(Call call, IOException e) {
+                listener.onFailure(code, e.getMessage());
+                ToastUtils.getInstance().showToast(e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String s = response.body().string();
+                PostFileResponse postFileResponse = JSON.parseObject(s, PostFileResponse.class);
+                postFileResponse.setReqseq(reqseq);
+                s = JSON.toJSONString(postFileResponse);
+                if (response == null) {
+                    listener.onFailure(code, s);
+                } else {
+                    if (postFileResponse.getKey() != null) {
+                        listener.onSuccess(code, s);
+                    } else {
+                        listener.onFailure(code, s);
+                    }
+                }
             }
         });
     }
 
-    public static void displayImg(final ImageView imageView,String url){
-        OkHttpUtils
-                .get()
-                .url(url)
-                .build()
-                .execute(new BitmapCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int i) {
-
-                    }
-
-                    @Override
-                    public void onResponse(Bitmap bitmap, int i) {
-
-                    }
-
-                });
-    }
 
 }

@@ -85,11 +85,9 @@ public class ChatActivity extends BaseActivity implements ResponseListener, Chat
                 bean.setLocalAudioUrl(filePath);
                 bean.setDurationSeconds(seconds);
                 bean.setFromMe(0);
+                bean.setSending(true);
                 DbUtils.getInstance().save(bean);
-                VoicePush voicePush = new VoicePush();
-                voicePush.setDurationSeconds((int) seconds);
-                voicePush.setFileUrl("");
-                HttpRequest.sendVoice(tel, JSON.toJSONString(voicePush),R.id.code_send_voice,ChatActivity.this,maxId,this);
+
                 adapter.addMsg(bean);
                 lvChat.setSelection(adapter.getCount() - 1);
             }
@@ -153,6 +151,12 @@ public class ChatActivity extends BaseActivity implements ResponseListener, Chat
                 break;
             case R.id.code_send_voice:
 
+                break;
+            case R.id.code_upload_file:
+//                VoicePush voicePush = new VoicePush();
+//                voicePush.setDurationSeconds((int) seconds);
+//                voicePush.setFileUrl("");
+//                HttpRequest.sendVoice(tel, JSON.toJSONString(voicePush),R.id.code_send_voice,ChatActivity.this,maxId,this);
                 break;
         }
     }

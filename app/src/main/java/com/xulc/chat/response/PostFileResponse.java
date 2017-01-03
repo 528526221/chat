@@ -15,6 +15,15 @@ public class PostFileResponse {
     private int imageWidth;
     private String key;
     private String mimeType;
+    private int reqseq;
+
+    public int getReqseq() {
+        return reqseq;
+    }
+
+    public void setReqseq(int reqseq) {
+        this.reqseq = reqseq;
+    }
 
     public String getEtag() {
         return etag;

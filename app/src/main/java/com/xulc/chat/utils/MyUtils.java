@@ -68,7 +68,11 @@ public class MyUtils {
         return false;
     }
 
-    //判断文件是否存在
+    /**
+     * 判断文件是否存在
+     * @param strFile
+     * @return
+     */
     public static boolean fileIsExists(String strFile)
     {
         File f=new File(strFile);

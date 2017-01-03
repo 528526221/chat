@@ -2,4 +2,5 @@
 <resources>
     <item name="code_send_text" type="id"></item>
     <item name="code_send_voice" type="id"></item>
+    <item name="code_upload_file" type="id"></item>
 </resources>
