@@ -37,6 +37,8 @@ public class TableChat {
     private float durationSeconds;//音频时长
     @Column(name = "sending")
     private boolean sending;//正在发送
+    @Column(name = "createTime")
+    private long createTime;//时间
 
 
     public long getId() {
@@ -159,5 +161,13 @@ public class TableChat {
 
     public void setSending(boolean sending) {
         this.sending = sending;
+    }
+
+    public long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
     }
 }

@@ -59,7 +59,7 @@ public class AudioManager {
         try {
             isPrepared = false;
 
-            //创建音频文件
+            //不存在目录则创建
             File dir = new File(mDir);
             if (!dir.exists()) {
                 dir.mkdir();

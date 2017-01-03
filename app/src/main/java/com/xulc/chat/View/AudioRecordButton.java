@@ -77,7 +77,7 @@ public class AudioRecordButton extends Button implements AudioManager.AudioState
 
     public AudioRecordButton(Context context, AttributeSet attrs) {
         super(context, attrs);
-        String dir = Environment.getExternalStorageDirectory() + "/cody_audios";
+        String dir = Environment.getExternalStorageDirectory() + "/QINBAN/AUDIO";
         mAudioManager = AudioManager.getInstance(dir);
         mAudioManager.setOnAudioStateListener(this);
 

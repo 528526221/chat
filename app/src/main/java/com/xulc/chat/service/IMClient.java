@@ -85,6 +85,7 @@ public class IMClient extends WebSocketClient {
 				chat.setToTel(response.getSenderId().getUserId());
 				chat.setText(response.getContent());
 				chat.setHeadImg(response.getSenderId().getImgUrl());
+				chat.setCreateTime(System.currentTimeMillis());
 				DbUtils.getInstance().save(chat);
 				break;
 			case 2:
@@ -100,6 +101,7 @@ public class IMClient extends WebSocketClient {
 				chat1.setToTel(response1.getSenderId().getUserId());
 				chat1.setImgUrl(response1.getImagePush().getFileUrl());
 				chat1.setHeadImg(response1.getSenderId().getImgUrl());
+				chat1.setCreateTime(System.currentTimeMillis());
 				DbUtils.getInstance().save(chat1);
 				break;
 			case 4:
@@ -116,6 +118,7 @@ public class IMClient extends WebSocketClient {
 				chat2.setAudioUrl(response2.getVoicePush().getFileUrl());
 				chat2.setDurationSeconds(response2.getVoicePush().getDurationSeconds());
 				chat2.setHeadImg(response2.getSenderId().getImgUrl());
+				chat2.setCreateTime(System.currentTimeMillis());
 				DbUtils.getInstance().save(chat2);
 				DownFileManager.downVoice(chat2.getAudioUrl(),maxId2);
 				break;

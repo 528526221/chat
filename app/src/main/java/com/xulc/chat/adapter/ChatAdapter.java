@@ -18,6 +18,7 @@ import com.xulc.chat.R;
 
 import com.xulc.chat.table.TableChat;
 import com.xulc.chat.utils.BitMapUtils;
+import com.xulc.chat.utils.DateUtils;
 import com.xulc.chat.utils.MediaManager;
 
 import java.util.ArrayList;
@@ -146,46 +147,55 @@ public class ChatAdapter extends BaseAdapter {
                     textHolderLeft = new TextHolderLeft();
                     textHolderLeft.headImg = (ImageView) convertView.findViewById(R.id.headImg);
                     textHolderLeft.tvText = (TextView) convertView.findViewById(R.id.tvText);
+                    textHolderLeft.tvDate = (TextView) convertView.findViewById(R.id.tvDate);
                     convertView.setTag(textHolderLeft);
                     textHolderLeft.tvText.setText(bean.getText());
                     ImageLoader.getInstance().displayImage(bean.getHeadImg(), textHolderLeft
                             .headImg, BitMapUtils.headOptions);
+                    textHolderLeft.tvDate.setText(DateUtils.ToMDHM(bean.getCreateTime()));
                     break;
                 case TEXT_RIGHT:
                     convertView = inflater.inflate(R.layout.item_text_right,parent,false);
                     textHolderRight = new TextHolderRight();
                     textHolderRight.headImg = (ImageView) convertView.findViewById(R.id.headImg);
                     textHolderRight.tvText = (TextView) convertView.findViewById(R.id.tvText);
+                    textHolderRight.tvDate = (TextView) convertView.findViewById(R.id.tvDate);
                     convertView.setTag(textHolderRight);
                     textHolderRight.tvText.setText(bean.getText());
                     ImageLoader.getInstance().displayImage(bean.getHeadImg(), textHolderRight
                             .headImg, BitMapUtils.headOptions);
+                    textHolderRight.tvDate.setText(DateUtils.ToMDHM(bean.getCreateTime()));
                     break;
                 case IMG_LEFT:
                     convertView = inflater.inflate(R.layout.item_img_left,parent,false);
                     imgHolderLeft = new ImgHolderLeft();
                     imgHolderLeft.headImg = (ImageView) convertView.findViewById(R.id.headImg);
                     imgHolderLeft.chatImg = (ImageView) convertView.findViewById(R.id.chatImg);
+                    imgHolderLeft.tvDate = (TextView) convertView.findViewById(R.id.tvDate);
                     convertView.setTag(imgHolderLeft);
                     ImageLoader.getInstance().displayImage(bean.getHeadImg(), imgHolderLeft
                             .headImg, BitMapUtils.headOptions);
                     ImageLoader.getInstance().displayImage(bean.getImgUrl(),
                             imgHolderLeft.chatImg, BitMapUtils.imageOptions);
+                    imgHolderLeft.tvDate.setText(DateUtils.ToMDHM(bean.getCreateTime()));
                     break;
                 case IMG_RIGHT:
                     convertView = inflater.inflate(R.layout.item_img_right,parent,false);
                     imgHolderRight = new ImgHolderRight();
                     imgHolderRight.headImg = (ImageView) convertView.findViewById(R.id.headImg);
                     imgHolderRight.chatImg = (ImageView) convertView.findViewById(R.id.chatImg);
+                    imgHolderRight.tvDate = (TextView) convertView.findViewById(R.id.tvDate);
                     convertView.setTag(imgHolderRight);
                     ImageLoader.getInstance().displayImage(bean.getHeadImg(), imgHolderRight
                             .headImg, BitMapUtils.headOptions);
                     ImageLoader.getInstance().displayImage(bean.getImgUrl(),
                             imgHolderRight.chatImg, BitMapUtils.imageOptions);
+                    imgHolderRight.tvDate.setText(DateUtils.ToMDHM(bean.getCreateTime()));
                     break;
                 case AUDIO_LEFT:
                     convertView = inflater.inflate(R.layout.item_audio_left,parent,false);
                     audioHolderLeft = new AudioHolderLeft();
+                    audioHolderLeft.tvDate = (TextView) convertView.findViewById(R.id.tvDate);
                     audioHolderLeft.headImg = (ImageView) convertView.findViewById(R.id.headImg);
                     audioHolderLeft.ivRecord = convertView.findViewById(R.id.ivRecord);
                     audioHolderLeft.lyAudio = (LinearLayout) convertView.findViewById(R.id.lyAudio);
@@ -207,10 +217,12 @@ public class ChatAdapter extends BaseAdapter {
                     }else {
                         audioHolderLeft.sendProgressbar.setVisibility(View.INVISIBLE);
                     }
+                    audioHolderLeft.tvDate.setText(DateUtils.ToMDHM(bean.getCreateTime()));
                     break;
                 case AUDIO_RIGHT:
                     convertView = inflater.inflate(R.layout.item_audio_right,parent,false);
                     audioHolderRight = new AudioHolderRight();
+                    audioHolderRight.tvDate = (TextView) convertView.findViewById(R.id.tvDate);
                     audioHolderRight.headImg = (ImageView) convertView.findViewById(R.id.headImg);
                     audioHolderRight.ivRecord = convertView.findViewById(R.id.ivRecord);
                     audioHolderRight.lyAudio = (LinearLayout) convertView.findViewById(R.id.lyAudio);
@@ -234,6 +246,7 @@ public class ChatAdapter extends BaseAdapter {
                     }else {
                         audioHolderRight.sendProgressbar.setVisibility(View.INVISIBLE);
                     }
+                    audioHolderRight.tvDate.setText(DateUtils.ToMDHM(bean.getCreateTime()));
                     break;
             }
         }else {
@@ -243,12 +256,14 @@ public class ChatAdapter extends BaseAdapter {
                     textHolderLeft.tvText.setText(bean.getText());
                     ImageLoader.getInstance().displayImage(bean.getHeadImg(), textHolderLeft
                             .headImg, BitMapUtils.headOptions);
+                    textHolderLeft.tvDate.setText(DateUtils.ToMDHM(bean.getCreateTime()));
                     break;
                 case TEXT_RIGHT:
                     textHolderRight = (TextHolderRight) convertView.getTag();
                     textHolderRight.tvText.setText(bean.getText());
                     ImageLoader.getInstance().displayImage(bean.getHeadImg(), textHolderRight
                             .headImg, BitMapUtils.headOptions);
+                    textHolderRight.tvDate.setText(DateUtils.ToMDHM(bean.getCreateTime()));
                     break;
                 case IMG_LEFT:
                     imgHolderLeft = (ImgHolderLeft) convertView.getTag();
@@ -256,7 +271,7 @@ public class ChatAdapter extends BaseAdapter {
                             .headImg, BitMapUtils.headOptions);
                     ImageLoader.getInstance().displayImage(bean.getImgUrl(),
                             imgHolderLeft.chatImg, BitMapUtils.imageOptions);
-
+                    imgHolderLeft.tvDate.setText(DateUtils.ToMDHM(bean.getCreateTime()));
                     break;
                 case IMG_RIGHT:
                     imgHolderRight = (ImgHolderRight) convertView.getTag();
@@ -264,6 +279,7 @@ public class ChatAdapter extends BaseAdapter {
                             .headImg, BitMapUtils.headOptions);
                     ImageLoader.getInstance().displayImage(bean.getImgUrl(),
                             imgHolderRight.chatImg, BitMapUtils.imageOptions);
+                    imgHolderRight.tvDate.setText(DateUtils.ToMDHM(bean.getCreateTime()));
                     break;
                 case AUDIO_LEFT:
                     audioHolderLeft = (AudioHolderLeft) convertView.getTag();
@@ -275,6 +291,13 @@ public class ChatAdapter extends BaseAdapter {
                     }else {
                         audioHolderLeft.sendProgressbar.setVisibility(View.INVISIBLE);
                     }
+                    audioHolderLeft.lyAudio.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            playAudioListener.onPlay(audioHolderLeft.ivRecord,position,true);
+                        }
+                    });
+                    audioHolderLeft.tvDate.setText(DateUtils.ToMDHM(bean.getCreateTime()));
                     break;
                 case AUDIO_RIGHT:
                     audioHolderRight = (AudioHolderRight) convertView.getTag();
@@ -286,6 +309,13 @@ public class ChatAdapter extends BaseAdapter {
                     }else {
                         audioHolderRight.sendProgressbar.setVisibility(View.INVISIBLE);
                     }
+                    audioHolderRight.lyAudio.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            playAudioListener.onPlay(audioHolderRight.ivRecord,position,true);
+                        }
+                    });
+                    audioHolderRight.tvDate.setText(DateUtils.ToMDHM(bean.getCreateTime()));
                     break;
             }
         }
@@ -295,19 +325,23 @@ public class ChatAdapter extends BaseAdapter {
     private static class TextHolderLeft{
         TextView tvText;
         ImageView headImg;
+        TextView tvDate;
     }
     private static class TextHolderRight{
         TextView tvText;
         ImageView headImg;
+        TextView tvDate;
     }
     private static class ImgHolderLeft{
         ImageView chatImg;
         ImageView headImg;
+        TextView tvDate;
     }
 
     private static class ImgHolderRight{
         ImageView chatImg;
         ImageView headImg;
+        TextView tvDate;
     }
 
     private static class AudioHolderLeft{
@@ -316,6 +350,7 @@ public class ChatAdapter extends BaseAdapter {
         LinearLayout lyAudio;
         ImageView headImg;
         ProgressBar sendProgressbar;
+        TextView tvDate;
     }
     private static class AudioHolderRight{
         TextView tvDuration;
@@ -323,6 +358,7 @@ public class ChatAdapter extends BaseAdapter {
         LinearLayout lyAudio;
         ImageView headImg;
         ProgressBar sendProgressbar;
+        TextView tvDate;
     }
 
 }

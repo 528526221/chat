@@ -25,6 +25,7 @@ import com.xulc.chat.table.TableChat;
 import com.xulc.chat.utils.DbUtils;
 import com.xulc.chat.utils.DownFileManager;
 import com.xulc.chat.utils.MediaManager;
+import com.xulc.chat.utils.MyUtils;
 import com.xulc.chat.utils.ToastUtils;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -121,6 +122,7 @@ public class ChatActivity extends BaseActivity implements ResponseListener, Chat
                 bean.setHeadImg(CWApplication.getInstance().getUser().getHeadPhotoUrl());
                 bean.setText(text);
                 bean.setFromMe(0);
+                bean.setCreateTime(System.currentTimeMillis());
                 DbUtils.getInstance().save(bean);
 
                 HttpRequest.sendText(tel, text, "APP", R.id.code_send_text, this, maxId, this);
@@ -179,7 +181,7 @@ public class ChatActivity extends BaseActivity implements ResponseListener, Chat
         }
         lastAudioView = view;
         lastAudioLeft = left;
-        if (TextUtils.isEmpty(adapter.getItem(position).getLocalAudioUrl())){
+        if (TextUtils.isEmpty(adapter.getItem(position).getLocalAudioUrl())|| !MyUtils.fileIsExists(adapter.getItem(position).getLocalAudioUrl())){
             ToastUtils.getInstance().showToast("正在下载");
             DownFileManager.downVoice(adapter.getItem(position).getAudioUrl(),adapter.getItem(position).getId());
             return;

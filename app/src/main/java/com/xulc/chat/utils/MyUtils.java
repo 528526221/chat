@@ -5,6 +5,8 @@ import android.content.Context;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
+import java.io.File;
+
 /**
  * Created by acer on 2016/6/11.
  */
@@ -65,4 +67,17 @@ public class MyUtils {
         }
         return false;
     }
+
+    //判断文件是否存在
+    public static boolean fileIsExists(String strFile)
+    {
+        File f=new File(strFile);
+        if(f.exists())
+        {
+            return true;
+        }else {
+            return false;
+        }
+    }
+
 }

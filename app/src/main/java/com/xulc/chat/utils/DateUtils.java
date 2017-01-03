@@ -11,16 +11,6 @@ import java.util.Date;
 public class DateUtils {
 
     /**
-     * 生成报废单号
-     * @param timeStamp
-     * @return
-     */
-    public static String ToBF(long timeStamp){
-        SimpleDateFormat format =  new SimpleDateFormat("yyyyMMddHHmmss");
-        return "BF"+format.format(timeStamp);
-    }
-
-    /**
      * 时间戳转化为年月日时分
      * @param timeStamp
      * @return
