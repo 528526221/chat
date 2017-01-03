@@ -1,5 +1,6 @@
 package com.xulc.chat.service;
 
+import android.app.DownloadManager;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
@@ -13,6 +14,7 @@ import com.xulc.chat.response.TextPushResponse;
 import com.xulc.chat.response.VoicePushResponse;
 import com.xulc.chat.table.TableChat;
 import com.xulc.chat.utils.DbUtils;
+import com.xulc.chat.utils.DownFileManager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.java_websocket.client.WebSocketClient;
@@ -107,14 +109,15 @@ public class IMClient extends WebSocketClient {
 				long maxId2 = DbUtils.getInstance().getCurMaxId() +1;
 				DbUtils.getInstance().setCurMaxId(maxId2);
 				chat2.setId(maxId2);
-				chat2.setContentType(2);
+				chat2.setContentType(4);
 				chat2.setFromMe(1);
 				chat2.setToPartyId(response2.getSenderId().getPartyId());
 				chat2.setToTel(response2.getSenderId().getUserId());
-				chat2.setAudioUrl(response2.getContent().getFileUrl());
-				chat2.setDurationSeconds(response2.getContent().getDurationSeconds());
+				chat2.setAudioUrl(response2.getVoicePush().getFileUrl());
+				chat2.setDurationSeconds(response2.getVoicePush().getDurationSeconds());
 				chat2.setHeadImg(response2.getSenderId().getImgUrl());
 				DbUtils.getInstance().save(chat2);
+				DownFileManager.downVoice(chat2.getAudioUrl(),maxId2);
 				break;
 		}
 

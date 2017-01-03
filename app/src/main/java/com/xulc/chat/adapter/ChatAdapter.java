@@ -4,11 +4,13 @@ import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -28,6 +30,7 @@ public class ChatAdapter extends BaseAdapter {
     private Context mContext;
     private LayoutInflater inflater;
     private List<TableChat> chatList;
+    private PlayAudioListener playAudioListener;
     private final int TEXT_LEFT=0;
     private final int TEXT_RIGHT=1;
     private final int IMG_LEFT=2;
@@ -35,10 +38,15 @@ public class ChatAdapter extends BaseAdapter {
     private final int AUDIO_LEFT=4;
     private final int AUDIO_RIGHT=5;
 
-    public ChatAdapter(Context mContext) {
+    public ChatAdapter(Context mContext,PlayAudioListener playAudioListener) {
         this.mContext = mContext;
         this.chatList = new ArrayList<>();
         this.inflater = LayoutInflater.from(mContext);
+        this.playAudioListener = playAudioListener;
+    }
+
+    public interface PlayAudioListener{
+        void onPlay(View view,int position,boolean left);
     }
 
     public void refresh(List<TableChat> chatList){
@@ -122,7 +130,7 @@ public class ChatAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         TextHolderLeft textHolderLeft;
         TextHolderRight textHolderRight;
         ImgHolderLeft imgHolderLeft;
@@ -179,10 +187,11 @@ public class ChatAdapter extends BaseAdapter {
                     convertView = inflater.inflate(R.layout.item_audio_left,parent,false);
                     audioHolderLeft = new AudioHolderLeft();
                     audioHolderLeft.headImg = (ImageView) convertView.findViewById(R.id.headImg);
-                    audioHolderLeft.ivRecord = (ImageView) convertView.findViewById(R.id.ivRecord);
+                    audioHolderLeft.ivRecord = convertView.findViewById(R.id.ivRecord);
                     audioHolderLeft.lyAudio = (LinearLayout) convertView.findViewById(R.id.lyAudio);
                     audioHolderLeft.headImg = (ImageView) convertView.findViewById(R.id.headImg);
                     audioHolderLeft.tvDuration = (TextView) convertView.findViewById(R.id.tvDuration);
+                    audioHolderLeft.sendProgressbar = (ProgressBar) convertView.findViewById(R.id.sendProgressbar);
                     convertView.setTag(audioHolderLeft);
                     ImageLoader.getInstance().displayImage(bean.getHeadImg(), audioHolderLeft
                             .headImg, BitMapUtils.headOptions);
@@ -190,29 +199,25 @@ public class ChatAdapter extends BaseAdapter {
                     audioHolderLeft.lyAudio.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            audioHolderLeft.ivRecord.setBackgroundResource(R.drawable.play_anim_left);
-                            AnimationDrawable anim = (AnimationDrawable) audioHolderLeft.ivRecord.getBackground();
-                            anim.start();
-                            MediaManager.playSound(bean.getLocalAudioUrl(), new MediaPlayer.OnCompletionListener() {
-
-
-                                @Override
-                                public void onCompletion(MediaPlayer mp) {
-                                    audioHolderLeft.ivRecord.setBackgroundResource(R.drawable
-                                            .v_anim3_left);
-                                }
-                            });
+                            playAudioListener.onPlay(audioHolderLeft.ivRecord,position,true);
                         }
                     });
+                    if (bean.isSending()){
+                        audioHolderLeft.sendProgressbar.setVisibility(View.VISIBLE);
+                    }else {
+                        audioHolderLeft.sendProgressbar.setVisibility(View.INVISIBLE);
+                    }
                     break;
                 case AUDIO_RIGHT:
                     convertView = inflater.inflate(R.layout.item_audio_right,parent,false);
                     audioHolderRight = new AudioHolderRight();
                     audioHolderRight.headImg = (ImageView) convertView.findViewById(R.id.headImg);
-                    audioHolderRight.ivRecord = (ImageView) convertView.findViewById(R.id.ivRecord);
+                    audioHolderRight.ivRecord = convertView.findViewById(R.id.ivRecord);
                     audioHolderRight.lyAudio = (LinearLayout) convertView.findViewById(R.id.lyAudio);
                     audioHolderRight.headImg = (ImageView) convertView.findViewById(R.id.headImg);
                     audioHolderRight.tvDuration = (TextView) convertView.findViewById(R.id.tvDuration);
+                    audioHolderRight.sendProgressbar = (ProgressBar) convertView.findViewById(R.id.sendProgressbar);
+
                     convertView.setTag(audioHolderRight);
                     ImageLoader.getInstance().displayImage(bean.getHeadImg(), audioHolderRight
                             .headImg, BitMapUtils.headOptions);
@@ -221,22 +226,14 @@ public class ChatAdapter extends BaseAdapter {
                     audioHolderRight.lyAudio.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            audioHolderRight.ivRecord.setBackgroundResource(R.drawable.play_anim);
-                            AnimationDrawable anim = (AnimationDrawable) audioHolderRight.ivRecord
-                                    .getBackground();
-                            anim.start();
-                            MediaManager.playSound(bean.getLocalAudioUrl(), new MediaPlayer
-                                    .OnCompletionListener() {
-
-
-                                @Override
-                                public void onCompletion(MediaPlayer mp) {
-                                    audioHolderRight.ivRecord.setBackgroundResource(R.drawable
-                                            .v_anim3);
-                                }
-                            });
+                            playAudioListener.onPlay(audioHolderRight.ivRecord,position,false);
                         }
                     });
+                    if (bean.isSending()){
+                        audioHolderRight.sendProgressbar.setVisibility(View.VISIBLE);
+                    }else {
+                        audioHolderRight.sendProgressbar.setVisibility(View.INVISIBLE);
+                    }
                     break;
             }
         }else {
@@ -273,12 +270,22 @@ public class ChatAdapter extends BaseAdapter {
                     ImageLoader.getInstance().displayImage(bean.getHeadImg(), audioHolderLeft
                             .headImg, BitMapUtils.headOptions);
                     audioHolderLeft.tvDuration.setText(bean.getKindlySeconds());
+                    if (bean.isSending()){
+                        audioHolderLeft.sendProgressbar.setVisibility(View.VISIBLE);
+                    }else {
+                        audioHolderLeft.sendProgressbar.setVisibility(View.INVISIBLE);
+                    }
                     break;
                 case AUDIO_RIGHT:
                     audioHolderRight = (AudioHolderRight) convertView.getTag();
                     ImageLoader.getInstance().displayImage(bean.getHeadImg(), audioHolderRight
                             .headImg, BitMapUtils.headOptions);
                     audioHolderRight.tvDuration.setText(bean.getKindlySeconds());
+                    if (bean.isSending()){
+                        audioHolderRight.sendProgressbar.setVisibility(View.VISIBLE);
+                    }else {
+                        audioHolderRight.sendProgressbar.setVisibility(View.INVISIBLE);
+                    }
                     break;
             }
         }
@@ -305,15 +312,17 @@ public class ChatAdapter extends BaseAdapter {
 
     private static class AudioHolderLeft{
         TextView tvDuration;
-        ImageView ivRecord;
+        View ivRecord;
         LinearLayout lyAudio;
         ImageView headImg;
+        ProgressBar sendProgressbar;
     }
     private static class AudioHolderRight{
         TextView tvDuration;
-        ImageView ivRecord;
+        View ivRecord;
         LinearLayout lyAudio;
         ImageView headImg;
+        ProgressBar sendProgressbar;
     }
 
 }

@@ -102,6 +102,22 @@ public class HttpRequest {
         HttpUtil.request2(SendTextUrl, map, code, listener, tag);
     }
 
-
+    /**
+     * 单聊发送语音
+     * @param receiverId
+     * @param content 序列化后的string
+     * @param code
+     * @param listener
+     * @param reqseq
+     * @param tag
+     */
+    public static void sendVoice(String receiverId,String content,int code,ResponseListener listener,long reqseq,Object tag){
+        Map<String,String> map = new HashMap<>();
+        map.put("sessionID", CWApplication.getInstance().getUser().getSessionID());
+        map.put("reqseq",String.valueOf(reqseq));
+        map.put("receiverId",receiverId);
+        map.put("content",content);
+        HttpUtil.request2(SendTextUrl, map, code, listener, tag);
+    }
 
 }

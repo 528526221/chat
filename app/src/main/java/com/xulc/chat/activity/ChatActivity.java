@@ -1,6 +1,7 @@
 package com.xulc.chat.activity;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -10,22 +11,23 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.alibaba.fastjson.JSON;
-import com.tencent.bugly.crashreport.CrashReport;
 import com.xulc.chat.R;
 import com.xulc.chat.View.AudioRecordButton;
 import com.xulc.chat.adapter.ChatAdapter;
 import com.xulc.chat.app.BaseActivity;
 import com.xulc.chat.app.CWApplication;
 import com.xulc.chat.bean.EventMsg;
+import com.xulc.chat.bean.VoicePush;
 import com.xulc.chat.constans.EventCode;
-import com.xulc.chat.okhttp.BaseResponse;
 import com.xulc.chat.okhttp.HttpRequest;
 import com.xulc.chat.okhttp.ResponseListener;
 import com.xulc.chat.table.TableChat;
 import com.xulc.chat.utils.DbUtils;
+import com.xulc.chat.utils.DownFileManager;
+import com.xulc.chat.utils.MediaManager;
+import com.xulc.chat.utils.ToastUtils;
 
 import org.greenrobot.eventbus.Subscribe;
-import org.xutils.common.util.KeyValue;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
@@ -36,7 +38,7 @@ import java.util.List;
  * Created by xuliangchun on 2016/10/11.
  */
 @ContentView(R.layout.activity_chat)
-public class ChatActivity extends BaseActivity implements ResponseListener {
+public class ChatActivity extends BaseActivity implements ResponseListener, ChatAdapter.PlayAudioListener {
     @ViewInject(R.id.lvChat) ListView lvChat;
     @ViewInject(R.id.etText) EditText etText;
     @ViewInject(R.id.btnSend) Button btnSend;
@@ -46,6 +48,8 @@ public class ChatActivity extends BaseActivity implements ResponseListener {
     private List<TableChat> chatList;
     private String partyId;
     private String tel;
+    private View lastAudioView;
+    private boolean lastAudioLeft;
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -63,7 +67,7 @@ public class ChatActivity extends BaseActivity implements ResponseListener {
         tel = intent.getStringExtra("tel");
         String name = intent.getStringExtra("name");
         setAppTitle(String.format("和%s聊天",name));
-        adapter = new ChatAdapter(this);
+        adapter = new ChatAdapter(this,this);
         lvChat.setAdapter(adapter);
         handler.sendEmptyMessage(0);
         audioRecordBtn.setDoneRecordListener(new AudioRecordButton.DoneRecordListener() {
@@ -81,7 +85,10 @@ public class ChatActivity extends BaseActivity implements ResponseListener {
                 bean.setDurationSeconds(seconds);
                 bean.setFromMe(0);
                 DbUtils.getInstance().save(bean);
-
+                VoicePush voicePush = new VoicePush();
+                voicePush.setDurationSeconds((int) seconds);
+                voicePush.setFileUrl("");
+                HttpRequest.sendVoice(tel, JSON.toJSONString(voicePush),R.id.code_send_voice,ChatActivity.this,maxId,this);
                 adapter.addMsg(bean);
                 lvChat.setSelection(adapter.getCount() - 1);
             }
@@ -138,7 +145,14 @@ public class ChatActivity extends BaseActivity implements ResponseListener {
 
     @Override
     public void onSuccess(int code, String result) {
+        switch (code){
+            case R.id.code_send_text:
 
+                break;
+            case R.id.code_send_voice:
+
+                break;
+        }
     }
 
     @Override
@@ -147,6 +161,49 @@ public class ChatActivity extends BaseActivity implements ResponseListener {
             case R.id.code_send_text:
 
                 break;
+            case R.id.code_send_voice:
+
+                break;
         }
+    }
+
+
+    @Override
+    public void onPlay(View view, int position, boolean left) {
+        if (lastAudioView!=null){
+            if (lastAudioLeft){
+                lastAudioView.setBackgroundResource(R.drawable.v_anim3_left);
+            }else {
+                lastAudioView.setBackgroundResource(R.drawable.v_anim3);
+            }
+        }
+        lastAudioView = view;
+        lastAudioLeft = left;
+        if (TextUtils.isEmpty(adapter.getItem(position).getLocalAudioUrl())){
+            ToastUtils.getInstance().showToast("正在下载");
+            DownFileManager.downVoice(adapter.getItem(position).getAudioUrl(),adapter.getItem(position).getId());
+            return;
+        }
+        if (lastAudioLeft){
+            lastAudioView.setBackgroundResource(R.drawable.play_anim_left);
+        }else {
+            lastAudioView.setBackgroundResource(R.drawable.play_anim);
+        }
+
+
+        AnimationDrawable anim = (AnimationDrawable) view.getBackground();
+        anim.start();
+
+        //播放音频
+        MediaManager.playSound(adapter.getItem(position).getLocalAudioUrl(), new MediaManager.PlayCompleteListener() {
+            @Override
+            public void playComplete() {
+                if (lastAudioLeft){
+                    lastAudioView.setBackgroundResource(R.drawable.v_anim3_left);
+                }else {
+                    lastAudioView.setBackgroundResource(R.drawable.v_anim3);
+                }
+            }
+        });
     }
 }

@@ -12,7 +12,15 @@ public class MediaManager {
     private static MediaPlayer mediaPlayer;
     private static boolean isPause;
 
-    public static void playSound(String filePath, MediaPlayer.OnCompletionListener listener) {
+
+    public interface PlayCompleteListener{
+        void playComplete();
+    }
+
+    public static void playSound(String filePath, final PlayCompleteListener playCompleteListener) {
+
+
+
         if (mediaPlayer == null) {
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
@@ -27,7 +35,12 @@ public class MediaManager {
         }
 
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        mediaPlayer.setOnCompletionListener(listener);
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                playCompleteListener.playComplete();
+            }
+        });
         try {
             mediaPlayer.setDataSource(filePath);
             mediaPlayer.prepare();

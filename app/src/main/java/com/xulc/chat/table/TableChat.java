@@ -35,6 +35,8 @@ public class TableChat {
     private String localAudioUrl;//音频本地路径
     @Column(name = "durationSeconds")
     private float durationSeconds;//音频时长
+    @Column(name = "sending")
+    private boolean sending;//正在发送
 
 
     public long getId() {
@@ -149,5 +151,13 @@ public class TableChat {
         }else {
             return String.format("%d''",sec);
         }
+    }
+
+    public boolean isSending() {
+        return sending;
+    }
+
+    public void setSending(boolean sending) {
+        this.sending = sending;
     }
 }
