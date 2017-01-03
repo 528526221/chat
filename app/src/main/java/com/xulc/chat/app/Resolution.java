@@ -1,5 +1,9 @@
 package com.xulc.chat.app;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
@@ -21,6 +25,7 @@ public class Resolution {
     public  static int screenH;
     public  static float density;
     public  static int statusBarHeight;
+    public static float scaledDensity;
 
     /**
      * 屏幕分辨率数据初始化
@@ -28,10 +33,11 @@ public class Resolution {
      * @param screenH 高
      * @param density 屏幕密度
      */
-    public static void init(int screenW, int screenH, float density) {
+    public static void init(int screenW, int screenH, float density,float scaledDensity) {
         Resolution.screenW = screenW;
         Resolution.screenH = screenH;
         Resolution.density = density;
+        Resolution.scaledDensity = scaledDensity;
     }
 
     /**
@@ -132,23 +138,67 @@ public class Resolution {
     }
 
     /**
-     * dp转px
-     * @param dpValue
-     * @return
+     * view转Bitmap
+     *
+     * @param view 视图
+     * @return bitmap
      */
-    public static int dip2px( float dpValue) {
+    public static Bitmap view2Bitmap(View view) {
+        if (view == null) return null;
+        Bitmap ret = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(ret);
+        Drawable bgDrawable = view.getBackground();
+        if (bgDrawable != null) {
+            bgDrawable.draw(canvas);
+        } else {
+            canvas.drawColor(Color.WHITE);
+        }
+        view.draw(canvas);
+        return ret;
+    }
+
+    /**
+     * dp转px
+     *
+     * @param dpValue dp值
+     * @return px值
+     */
+    public static int dp2px(float dpValue) {
         final float scale = density;
         return (int) (dpValue * scale + 0.5f);
     }
 
     /**
      * px转dp
-     * @param pxValue
-     * @return
+     *
+     * @param pxValue px值
+     * @return dp值
      */
-    public static int px2dip(float pxValue) {
+    public static int px2dp(float pxValue) {
         final float scale = density;
         return (int) (pxValue / scale + 0.5f);
+    }
+
+    /**
+     * sp转px
+     *
+     * @param spValue sp值
+     * @return px值
+     */
+    public static int sp2px(float spValue) {
+        final float fontScale = scaledDensity;
+        return (int) (spValue * fontScale + 0.5f);
+    }
+
+    /**
+     * px转sp
+     *
+     * @param pxValue px值
+     * @return sp值
+     */
+    public static int px2sp(float pxValue) {
+        final float fontScale = scaledDensity;
+        return (int) (pxValue / fontScale + 0.5f);
     }
 
     /**

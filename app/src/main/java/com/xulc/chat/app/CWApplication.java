@@ -8,6 +8,7 @@ import android.util.DisplayMetrics;
 import com.alibaba.fastjson.JSON;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.tencent.bugly.crashreport.CrashReport;
 import com.xulc.chat.bean.User;
 import com.xulc.chat.constans.ShareKey;
 import com.xulc.chat.utils.PreferencesUtils;
@@ -34,6 +35,7 @@ public class CWApplication extends Application {
         x.Ext.setDebug(true);
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
         ImageLoader.getInstance().init(config);
+        CrashReport.initCrashReport(getApplicationContext(), "0456eafee6", false);
     }
 
 
@@ -44,7 +46,7 @@ public class CWApplication extends Application {
 
     private void setResolution(){
         DisplayMetrics metrics = getResources().getDisplayMetrics();
-        Resolution.init(metrics.widthPixels,metrics.heightPixels,metrics.density);
+        Resolution.init(metrics.widthPixels,metrics.heightPixels,metrics.density,metrics.scaledDensity);
     }
 
     /**

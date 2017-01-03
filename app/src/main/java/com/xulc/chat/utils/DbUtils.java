@@ -42,7 +42,7 @@ public class DbUtils {
         return curMaxId;
     }
 
-    public  void setCurMaxId(long curMaxId) {
+    public void setCurMaxId(long curMaxId) {
         this.curMaxId = curMaxId;
     }
 

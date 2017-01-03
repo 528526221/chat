@@ -27,10 +27,14 @@ public class TableChat {
     private String text;//文本内容
     @Column(name = "imgUrl")
     private String imgUrl;//图片网络地址
+    @Column(name = "localImgUrl")
+    private String localImgUrl;//图片本地路径
     @Column(name = "audioUrl")
     private String audioUrl;//音频网络地址
+    @Column(name = "localAudioUrl")
+    private String localAudioUrl;//音频本地路径
     @Column(name = "durationSeconds")
-    private int durationSeconds;//音频时长
+    private float durationSeconds;//音频时长
 
 
     public long getId() {
@@ -89,11 +93,11 @@ public class TableChat {
         this.audioUrl = audioUrl;
     }
 
-    public int getDurationSeconds() {
+    public float getDurationSeconds() {
         return durationSeconds;
     }
 
-    public void setDurationSeconds(int durationSeconds) {
+    public void setDurationSeconds(float durationSeconds) {
         this.durationSeconds = durationSeconds;
     }
 
@@ -119,5 +123,31 @@ public class TableChat {
 
     public void setSendSuccess(int sendSuccess) {
         this.sendSuccess = sendSuccess;
+    }
+
+    public String getLocalImgUrl() {
+        return localImgUrl;
+    }
+
+    public void setLocalImgUrl(String localImgUrl) {
+        this.localImgUrl = localImgUrl;
+    }
+
+    public String getLocalAudioUrl() {
+        return localAudioUrl;
+    }
+
+    public void setLocalAudioUrl(String localAudioUrl) {
+        this.localAudioUrl = localAudioUrl;
+    }
+
+    public String getKindlySeconds(){
+        int min = (int) (durationSeconds/60);
+        int sec = (int) (durationSeconds%60);
+        if (min>0){
+            return String.format("%d'%d''",min,sec);
+        }else {
+            return String.format("%d''",sec);
+        }
     }
 }

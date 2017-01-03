@@ -1,11 +1,14 @@
 package com.xulc.chat.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
+import android.media.MediaPlayer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -13,6 +16,7 @@ import com.xulc.chat.R;
 
 import com.xulc.chat.table.TableChat;
 import com.xulc.chat.utils.BitMapUtils;
+import com.xulc.chat.utils.MediaManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +32,8 @@ public class ChatAdapter extends BaseAdapter {
     private final int TEXT_RIGHT=1;
     private final int IMG_LEFT=2;
     private final int IMG_RIGHT=3;
+    private final int AUDIO_LEFT=4;
+    private final int AUDIO_RIGHT=5;
 
     public ChatAdapter(Context mContext) {
         this.mContext = mContext;
@@ -94,10 +100,10 @@ public class ChatAdapter extends BaseAdapter {
                 switch (formMe){
                     case 0:
                         //right
-                        break;
+                        return AUDIO_RIGHT;
                     case 1:
                         //left
-                        break;
+                        return AUDIO_LEFT;
                 }
                 break;
             default:
@@ -121,7 +127,9 @@ public class ChatAdapter extends BaseAdapter {
         TextHolderRight textHolderRight;
         ImgHolderLeft imgHolderLeft;
         ImgHolderRight imgHolderRight;
-        TableChat bean = getItem(position);
+        final AudioHolderLeft audioHolderLeft;
+        final AudioHolderRight audioHolderRight;
+        final TableChat bean = getItem(position);
         int type = getItemViewType(position);
         if (convertView == null){
             switch (type){
@@ -167,6 +175,69 @@ public class ChatAdapter extends BaseAdapter {
                     ImageLoader.getInstance().displayImage(bean.getImgUrl(),
                             imgHolderRight.chatImg, BitMapUtils.imageOptions);
                     break;
+                case AUDIO_LEFT:
+                    convertView = inflater.inflate(R.layout.item_audio_left,parent,false);
+                    audioHolderLeft = new AudioHolderLeft();
+                    audioHolderLeft.headImg = (ImageView) convertView.findViewById(R.id.headImg);
+                    audioHolderLeft.ivRecord = (ImageView) convertView.findViewById(R.id.ivRecord);
+                    audioHolderLeft.lyAudio = (LinearLayout) convertView.findViewById(R.id.lyAudio);
+                    audioHolderLeft.headImg = (ImageView) convertView.findViewById(R.id.headImg);
+                    audioHolderLeft.tvDuration = (TextView) convertView.findViewById(R.id.tvDuration);
+                    convertView.setTag(audioHolderLeft);
+                    ImageLoader.getInstance().displayImage(bean.getHeadImg(), audioHolderLeft
+                            .headImg, BitMapUtils.headOptions);
+                    audioHolderLeft.tvDuration.setText(bean.getKindlySeconds());
+                    audioHolderLeft.lyAudio.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            audioHolderLeft.ivRecord.setBackgroundResource(R.drawable.play_anim_left);
+                            AnimationDrawable anim = (AnimationDrawable) audioHolderLeft.ivRecord.getBackground();
+                            anim.start();
+                            MediaManager.playSound(bean.getLocalAudioUrl(), new MediaPlayer.OnCompletionListener() {
+
+
+                                @Override
+                                public void onCompletion(MediaPlayer mp) {
+                                    audioHolderLeft.ivRecord.setBackgroundResource(R.drawable
+                                            .v_anim3_left);
+                                }
+                            });
+                        }
+                    });
+                    break;
+                case AUDIO_RIGHT:
+                    convertView = inflater.inflate(R.layout.item_audio_right,parent,false);
+                    audioHolderRight = new AudioHolderRight();
+                    audioHolderRight.headImg = (ImageView) convertView.findViewById(R.id.headImg);
+                    audioHolderRight.ivRecord = (ImageView) convertView.findViewById(R.id.ivRecord);
+                    audioHolderRight.lyAudio = (LinearLayout) convertView.findViewById(R.id.lyAudio);
+                    audioHolderRight.headImg = (ImageView) convertView.findViewById(R.id.headImg);
+                    audioHolderRight.tvDuration = (TextView) convertView.findViewById(R.id.tvDuration);
+                    convertView.setTag(audioHolderRight);
+                    ImageLoader.getInstance().displayImage(bean.getHeadImg(), audioHolderRight
+                            .headImg, BitMapUtils.headOptions);
+                    audioHolderRight.tvDuration.setText(bean.getKindlySeconds());
+
+                    audioHolderRight.lyAudio.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            audioHolderRight.ivRecord.setBackgroundResource(R.drawable.play_anim);
+                            AnimationDrawable anim = (AnimationDrawable) audioHolderRight.ivRecord
+                                    .getBackground();
+                            anim.start();
+                            MediaManager.playSound(bean.getLocalAudioUrl(), new MediaPlayer
+                                    .OnCompletionListener() {
+
+
+                                @Override
+                                public void onCompletion(MediaPlayer mp) {
+                                    audioHolderRight.ivRecord.setBackgroundResource(R.drawable
+                                            .v_anim3);
+                                }
+                            });
+                        }
+                    });
+                    break;
             }
         }else {
             switch (type){
@@ -197,6 +268,18 @@ public class ChatAdapter extends BaseAdapter {
                     ImageLoader.getInstance().displayImage(bean.getImgUrl(),
                             imgHolderRight.chatImg, BitMapUtils.imageOptions);
                     break;
+                case AUDIO_LEFT:
+                    audioHolderLeft = (AudioHolderLeft) convertView.getTag();
+                    ImageLoader.getInstance().displayImage(bean.getHeadImg(), audioHolderLeft
+                            .headImg, BitMapUtils.headOptions);
+                    audioHolderLeft.tvDuration.setText(bean.getKindlySeconds());
+                    break;
+                case AUDIO_RIGHT:
+                    audioHolderRight = (AudioHolderRight) convertView.getTag();
+                    ImageLoader.getInstance().displayImage(bean.getHeadImg(), audioHolderRight
+                            .headImg, BitMapUtils.headOptions);
+                    audioHolderRight.tvDuration.setText(bean.getKindlySeconds());
+                    break;
             }
         }
         return convertView;
@@ -217,6 +300,19 @@ public class ChatAdapter extends BaseAdapter {
 
     private static class ImgHolderRight{
         ImageView chatImg;
+        ImageView headImg;
+    }
+
+    private static class AudioHolderLeft{
+        TextView tvDuration;
+        ImageView ivRecord;
+        LinearLayout lyAudio;
+        ImageView headImg;
+    }
+    private static class AudioHolderRight{
+        TextView tvDuration;
+        ImageView ivRecord;
+        LinearLayout lyAudio;
         ImageView headImg;
     }
 

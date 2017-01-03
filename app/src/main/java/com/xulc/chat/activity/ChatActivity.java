@@ -10,7 +10,9 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.alibaba.fastjson.JSON;
+import com.tencent.bugly.crashreport.CrashReport;
 import com.xulc.chat.R;
+import com.xulc.chat.View.AudioRecordButton;
 import com.xulc.chat.adapter.ChatAdapter;
 import com.xulc.chat.app.BaseActivity;
 import com.xulc.chat.app.CWApplication;
@@ -38,6 +40,8 @@ public class ChatActivity extends BaseActivity implements ResponseListener {
     @ViewInject(R.id.lvChat) ListView lvChat;
     @ViewInject(R.id.etText) EditText etText;
     @ViewInject(R.id.btnSend) Button btnSend;
+    @ViewInject(R.id.btnTextRecord)Button btnTextRecord;
+    @ViewInject(R.id.audioRecordBtn)AudioRecordButton audioRecordBtn;
     private ChatAdapter adapter;
     private List<TableChat> chatList;
     private String partyId;
@@ -54,7 +58,6 @@ public class ChatActivity extends BaseActivity implements ResponseListener {
     @Override
     public void underCreate() {
         setOpenEventBus(true);
-
         Intent intent = getIntent();
         partyId = intent.getStringExtra("partyId");
         tel = intent.getStringExtra("tel");
@@ -63,6 +66,26 @@ public class ChatActivity extends BaseActivity implements ResponseListener {
         adapter = new ChatAdapter(this);
         lvChat.setAdapter(adapter);
         handler.sendEmptyMessage(0);
+        audioRecordBtn.setDoneRecordListener(new AudioRecordButton.DoneRecordListener() {
+            @Override
+            public void onFinish(float seconds, String filePath) {
+                long maxId = DbUtils.getInstance().getCurMaxId() +1;
+                DbUtils.getInstance().setCurMaxId(maxId);
+                TableChat bean = new TableChat();
+                bean.setContentType(4);
+                bean.setId(maxId);
+                bean.setToPartyId(partyId);
+                bean.setToTel(tel);
+                bean.setHeadImg(CWApplication.getInstance().getUser().getHeadPhotoUrl());
+                bean.setLocalAudioUrl(filePath);
+                bean.setDurationSeconds(seconds);
+                bean.setFromMe(0);
+                DbUtils.getInstance().save(bean);
+
+                adapter.addMsg(bean);
+                lvChat.setSelection(adapter.getCount() - 1);
+            }
+        });
     }
     @Subscribe
     public void onEventMainThread(EventMsg msg){
@@ -73,7 +96,7 @@ public class ChatActivity extends BaseActivity implements ResponseListener {
         }
     }
 
-    @Event(value = R.id.btnSend)
+    @Event(value = {R.id.btnSend,R.id.btnTextRecord})
     private void onClick(View view){
         switch (view.getId()){
             case R.id.btnSend:
@@ -97,6 +120,17 @@ public class ChatActivity extends BaseActivity implements ResponseListener {
 
                 adapter.addMsg(bean);
                 lvChat.setSelection(adapter.getCount()-1);
+                break;
+            case R.id.btnTextRecord:
+                if (btnTextRecord.getText().toString().equals("语音")){
+                    etText.setVisibility(View.INVISIBLE);
+                    audioRecordBtn.setVisibility(View.VISIBLE);
+                    btnTextRecord.setText("文本");
+                }else {
+                    etText.setVisibility(View.VISIBLE);
+                    audioRecordBtn.setVisibility(View.INVISIBLE);
+                    btnTextRecord.setText("语音");
+                }
                 break;
         }
 
